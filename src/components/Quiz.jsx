@@ -2,17 +2,15 @@ import { useState } from "react";
 import { useEffect } from "react";
 
 
-export default function Quiz ({ questions, answers, userName }) {
+export default function Quiz (quizData) {
 
-    console.log( questions, answers, userName);
-
-
+    
 
   /**
    * Using react hooks, set the default state
    */
-  const [state, setState] = useState(questions);
-  const [question, setQuestion] = useState(questions[0])
+  const [state, setState] = useState(quizData);
+  const [question, setQuestion] = useState(state.questions[0])
  
   /**
    * Declare the update state method that will handle the state values
@@ -21,27 +19,48 @@ export default function Quiz ({ questions, answers, userName }) {
     setState({ ...state, ...newState });
   };
 
-
 //   const quizData = {
 
 //     "questions": questions.slice(0, -1), //only n Questions (5) 
 //     "answers": [],
 //     "userName": "John Doe"
+ //  questionsRemains: questions.slice(0, -1).length
         
-  
 //   }
-    const setAnswer = (trueOrFalse ) => {
-        const updatedAnswers = answers.concat[trueOrFalse]
-        setState( {...state, answers: updatedAnswers } );
 
-        setQuestion( questions[1] );
-        console.log(state)
-        console.log(question)
+useEffect(() => {
+  if (state.questionsRemains < 2) {
+    state.showResult = true; 
+  }
+}, [state]);
+
+ 
+// case "nextList": {
+//   let thisId = action.allLists.findIndex((list) => list.id === action.currentList.id)
+//   return(action.allLists[(thisId + 1) % action.allLists.length])
+// } 
+
+// case "lastList": {
+//   let thisId = action.allLists.findIndex((list) => list.id === action.currentList.id)
+//   return(action.allLists[(thisId + action.allLists.length - 1) % action.allLists.length ])
+// } 
+ 
+  
+    const setAnswer = (trueOrFalse ) => {
+        const updatedAnswers = state.answers.concat([trueOrFalse])
+        console.log("updatedAnswers", updatedAnswers)
+
+        setState( {...state, answers:  updatedAnswers, questionsRemains: state.questionsRemains - 1} );
+        const thisId = state.questions.findIndex((q) => q.id === question.id)
+        const nextId = (thisId + 1) % state.questions.length
+        setQuestion( state.questions[nextId] );
+        console.log("trueOrFalse", trueOrFalse)
+        console.log("state", state)
+   
     };
-    const initialQuestion = questions[0];
+
   
     const handleAnswer = (e) => {
-        console.log (e.target.dataset.answer)
         if (e.target.dataset.answer === question.correctAnswer) {
             setAnswer(true)
         } else {
@@ -51,10 +70,8 @@ export default function Quiz ({ questions, answers, userName }) {
     }
 
 
-    return(
+    return((state.showResult === false)?(
         <div className="quiz">
-
-        
         <div className="frage">
           <p>{question.question}</p>
         </div>
@@ -69,7 +86,10 @@ export default function Quiz ({ questions, answers, userName }) {
             }
           </ul>
         </div>
-      </div>
+        </div>
+      )
+      :(<div className="finish">Du hattest {state.answers.reduce((acc, a) => acc += (a === true) && 1)} Antworten richtig</div>)
 
     )
+    
 }

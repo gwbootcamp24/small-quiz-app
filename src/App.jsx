@@ -11,22 +11,27 @@ function App() {
 const quizData = {
 
   "questions": questions.slice(0, -1), //only n Questions (5) 
-  "answers": [],
-  "userName": "John Doe"
+  "answers": [], 
+  "userName": "John Doe",
+  questionsRemains: questions.slice(0, -1).length,
+  showResult: false
+
 
 }
+
+
 
   /**
    * Using react hooks, set the default state
    */
-  const [state, setState] = useState(quizData);
+  // const [state, setState] = useState(quizData);
  
   /**
    * Declare the update state method that will handle the state values
    */
-  const updateState = (newState ) => {
-    setState({ ...state, ...newState });
-  };
+  // const updateState = (newState ) => {
+  //   setState({ ...state, ...newState });
+  // };
 
 
 // });
@@ -43,7 +48,7 @@ const quizData = {
   //   ],
   // },
 
-  console.log(quizData)
+  // console.log(quizData)
 
   return (
     <>
