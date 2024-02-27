@@ -10,10 +10,10 @@ function App() {
 
 const quizData = {
 
-  "questions": questions.slice(0, -1), //only n Questions (5) 
+  "questions": questions.slice(0), //only n Questions (5) 
   "answers": [], 
   "userName": "John Doe",
-  questionsRemains: questions.slice(0, -1).length,
+  questionsRemains: questions.slice(0).length,
   showResult: false
 
 
@@ -48,7 +48,6 @@ const quizData = {
   //   ],
   // },
 
-  // console.log(quizData)
 
   return (
     <>

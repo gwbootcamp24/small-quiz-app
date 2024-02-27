@@ -15,9 +15,9 @@ export default function Quiz (quizData) {
   /**
    * Declare the update state method that will handle the state values
    */
-  const updateState = (newState ) => {
-    setState({ ...state, ...newState });
-  };
+  // const updateState = (newState ) => {
+  //   setState({ ...state, ...newState });
+  // };
 
 //   const quizData = {
 
@@ -48,26 +48,27 @@ useEffect(() => {
   
     const setAnswer = (trueOrFalse ) => {
         const updatedAnswers = state.answers.concat([trueOrFalse])
-        console.log("updatedAnswers", updatedAnswers)
 
         setState( {...state, answers:  updatedAnswers, questionsRemains: state.questionsRemains - 1} );
         const thisId = state.questions.findIndex((q) => q.id === question.id)
         const nextId = (thisId + 1) % state.questions.length
         setQuestion( state.questions[nextId] );
-        console.log("trueOrFalse", trueOrFalse)
-        console.log("state", state)
    
     };
 
   
     const handleAnswer = (e) => {
-        if (e.target.dataset.answer === question.correctAnswer) {
-            setAnswer(true)
-        } else {
-            setAnswer(false)
-        }
-    
+      if (e.target.dataset.answer === question.correctAnswer) {
+          setAnswer(true)
+      } else {
+          setAnswer(false)
+      }
+  
     }
+
+    const restartQuiz = (e) => {
+      setState(quizData);
+    } 
 
 
     return((state.showResult === false)?(
@@ -88,7 +89,12 @@ useEffect(() => {
         </div>
         </div>
       )
-      :(<div className="finish">Du hattest {state.answers.reduce((acc, a) => acc += (a === true) && 1)} Antworten richtig</div>)
+      :(<><div className="finish">Du hattest {state.answers.reduce((acc, a) => acc += (a === true) && 1)} Antworten richtig
+      <br/><br/>
+      <button onClick={restartQuiz}>Nochmal spielen?</button></div>
+      
+      </>
+      )
 
     )
     
