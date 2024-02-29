@@ -4,13 +4,13 @@ import { useEffect } from "react";
 
 export default function Quiz (quizData) {
 
-    
+  //  console.log(quizData) 
 
   /**
    * Using react hooks, set the default state
    */
   const [state, setState] = useState(quizData);
-  const [question, setQuestion] = useState(state.questions[0])
+  const [question, setQuestion] = useState(quizData.questions[0])
  
   /**
    * Declare the update state method that will handle the state values
@@ -28,12 +28,6 @@ export default function Quiz (quizData) {
         
 //   }
 
-useEffect(() => {
-  if (state.questionsRemains < 2) {
-    state.showResult = true; 
-  }
-}, [state]);
-
  
 // case "nextList": {
 //   let thisId = action.allLists.findIndex((list) => list.id === action.currentList.id)
@@ -44,7 +38,18 @@ useEffect(() => {
 //   let thisId = action.allLists.findIndex((list) => list.id === action.currentList.id)
 //   return(action.allLists[(thisId + action.allLists.length - 1) % action.allLists.length ])
 // } 
- 
+
+// useEffect(() => {
+//   if (state.questionsRemains < 2) {
+//     setState({...state, showResult: true})
+//   }
+// }, [state]);
+
+// useEffect(() => {
+//   setQuestion
+// }, []);
+
+
   
     const setAnswer = (trueOrFalse ) => {
         const updatedAnswers = state.answers.concat([trueOrFalse])
@@ -70,8 +75,10 @@ useEffect(() => {
       setState(quizData);
     } 
 
+    console.log("question",question) 
+    console.log("state.questionsRemains",state.questionsRemains) 
 
-    return((state.showResult === false)?(
+    return((state.questionsRemains > 0)?(
         <div className="quiz">
         <div className="frage">
           <p>{question.question}</p>

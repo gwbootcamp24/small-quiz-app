@@ -1,25 +1,28 @@
-import { useState } from 'react'
-import { useEffect } from 'react'
 import questions  from './questions'
-import Quiz from './components/Quiz'
+import QuizWrapper from './components/QuizWrapper'
 import './App.css'
 
 function App() {
 
 
+const QUIZ_DATA_START_VALUE = {
 
-const quizData = {
-
-  "questions": questions.slice(0), //only n Questions (5) 
+  "questions": [],  
   "answers": [], 
   "userName": "John Doe",
-  questionsRemains: questions.slice(0).length,
+  questionsRemains:  0 ,
   showResult: false
+
+  // "questions": questions.slice(0), //only n Questions (5) 
+  // "answers": [], 
+  // "userName": "John Doe",
+  // questionsRemains: questions.slice(0).length,
+  // showResult: false
+
 
 
 }
-
-
+ 
 
   /**
    * Using react hooks, set the default state
@@ -52,7 +55,7 @@ const quizData = {
   return (
     <>
     <main>
-      <Quiz {...quizData} />
+      <QuizWrapper {...QUIZ_DATA_START_VALUE} />
     </main>
     </>
   )
