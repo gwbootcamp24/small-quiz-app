@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useEffect } from "react";
-
+import {decode} from 'html-entities';
 
 export default function Quiz (quizData) {
 
@@ -92,13 +92,13 @@ useEffect(() => {
     return((state.questionsRemains > 0)?(
         <div className="quiz">
         <div className="frage">
-          <p>{question.question}</p>
+          <p>{decode(question.question)}</p>
         </div>
         <div className="Antworten">
           <ul>
             {
               question.answers.map((answer, index) => (
-                <li onClick={handleAnswer} key={index} data-answer={answer} >{answer}</li>
+                <li onClick={handleAnswer} key={index} data-answer={answer} >{decode(answer)}</li>
 
 
               ))

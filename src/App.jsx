@@ -2,6 +2,8 @@ import questions  from './questions'
 import { useState, useEffect } from "react";
 import QuizWrapper from './components/QuizWrapper'
 import './App.css'
+import Wave from '../assets/wave.svg'
+import Earth from '../assets/earth.svg'
 
 function App() {
 
@@ -91,8 +93,15 @@ const QUIZ_DATA_START_VALUE = {
 
   return (
     <>
+      
     <main>
+      <h1>My Fancy Quiz App</h1>
+      <img src={Wave} alt="" srcset="" />
+    <div className="main">
       <QuizWrapper {...QUIZ_DATA_START_VALUE} quizCategories={quizCategories} />
+    </div>
+    <img src={Earth} alt="" srcset="" />
+
     </main>
     </>
   )
