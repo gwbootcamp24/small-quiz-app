@@ -3,12 +3,11 @@ import Quiz from "./Quiz";
 
  
 const Quizwrapper = (quizDataInit) => {
- 
   const [quizData, setQuizData] = useState([quizDataInit])
-  const [startQuizState, setStartQuizState] = useState({startIt: false, numQuestions: 1})
-  const [startQuizGo, setStartQuizGo] = useState([false])
+  const [startQuizState, setStartQuizState] = useState({startIt: false, numQuestions: 1, categoryId: 9})
+  const [quizView, setQuizView] = useState({'selectQuizOptions': true, 'showQuiz': false})
   const [error, setError] = useState([])
- 
+ console.log(quizDataInit)
   const testquestion = {
     "response_code": 0,
     "results": [
@@ -90,7 +89,7 @@ const Quizwrapper = (quizDataInit) => {
 
     if ( startQuizState.startIt === true) {
       console.log ('FÄÄÄDSCH!')
-      fetch(`https://opentdb.com/api.php?amount=${startQuizState.numQuestions}&type=multiple`)
+      fetch(`https://opentdb.com/api.php?amount=${startQuizState.numQuestions}&category=${startQuizState.categoryId}&type=multiple`)
       .then((res) => {
         if (!res.ok) throw new Error('Request failed')
         return res.json();
@@ -104,14 +103,14 @@ const Quizwrapper = (quizDataInit) => {
               id: crypto.randomUUID(),
               question: q.question,
               correctAnswer: q.correct_answer,
-              answers: [...q.incorrect_answers, q.correct_answer]
+              answers: [...q.incorrect_answers, q.correct_answer].toSorted((a, b) => 0.5 - Math.random())
             }
 
             return compatibleQ
           })
 
           setQuizData({...quizDataInit, questions: compatibleQuestions, questionsRemains: startQuizState.numQuestions})
-      setStartQuizGo(true)
+      setQuizView({'selectQuizOptions': false, 'showQuiz': true})
 
         }
       )
@@ -123,16 +122,33 @@ const Quizwrapper = (quizDataInit) => {
   // https://opentdb.com/api.php?amount=10&type=multiple
 
    
+  // const [quizView, setQuizView] = useState({'selectQuizOptions': true, 'showQuiz': false})
+
+  // https://opentdb.com/api_category.php
 
 
 
-  
   return (
-  <>
-  <button onClick={() => setStartQuizState({startIt: true, numQuestions: 6})}>{"Start Quiz small"}</button>  
-  <button onClick={() => setStartQuizState({startIt: true, numQuestions: 12})}>{"Start Quiz Big"}</button>  
-  {startQuizGo === true && <Quiz {...quizData} />}
+  (quizView.selectQuizOptions === true)?  
+  <> 
+  <select name="quiz_category" onChange={(e) => setStartQuizState({...startQuizState, categoryId: e.target.value})} value={startQuizState.categoryId}>
+  {Array.isArray(quizDataInit.quizCategories)&&quizDataInit.quizCategories.map((cat, index) => (
+                <> 
+                <option value={cat.id} key={index} data-name={cat.name}>{cat.name}</option>
+                </>
+    ))
+  }
+  </select>  
+  <button onClick={() => setStartQuizState({...startQuizState, startIt: true, numQuestions: 6})}>{"Small Quiz (6 Fragen)"}</button>
+  <button onClick={() => setStartQuizState({...startQuizState, startIt: true, numQuestions: 12})}>{"Big Quiz (12 Fragen)"}</button>
   </>
+  :
+  <> 
+  {quizView.showQuiz === true && <Quiz {...quizData} startQuizState={startQuizState} setStartQuizState={setStartQuizState} />}
+
+   
+  </>
+
   )
 }
 

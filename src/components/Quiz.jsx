@@ -11,6 +11,7 @@ export default function Quiz (quizData) {
    */
   const [state, setState] = useState(quizData);
   const [question, setQuestion] = useState(quizData.questions[0])
+  const [showReplay, setShowReplay] = useState(false)
  
   /**
    * Declare the update state method that will handle the state values
@@ -49,7 +50,15 @@ export default function Quiz (quizData) {
 //   setQuestion
 // }, []);
 
+useEffect(() => {
+  if (state.questionsRemains < 1) {
+    const timeout = setTimeout(() => setShowReplay(true), 3000);
+    return () =>{
+      clearInterval(timeout)
+    }    
+  } 
 
+}, [state.questionsRemains])
   
     const setAnswer = (trueOrFalse ) => {
         const updatedAnswers = state.answers.concat([trueOrFalse])
@@ -78,6 +87,8 @@ export default function Quiz (quizData) {
     console.log("question",question) 
     console.log("state.questionsRemains",state.questionsRemains) 
 
+    const {startQuizState, setStartQuizState} = quizData
+
     return((state.questionsRemains > 0)?(
         <div className="quiz">
         <div className="frage">
@@ -98,8 +109,11 @@ export default function Quiz (quizData) {
       )
       :(<><div className="finish">Du hattest {state.answers.reduce((acc, a) => acc += (a === true) && 1)} Antworten richtig
       <br/><br/>
-      <button onClick={restartQuiz}>Nochmal spielen?</button></div>
-      
+
+      {/* {showReplay === true && <button onClick={() => setStartQuizState({...startQuizState, startIt: false, numQuestions: 2, categoryId: 9})}>Nochmal spielen?</button>} */}
+      {showReplay === true && <button onClick={restartQuiz}>Nochmal spielen?</button>}
+
+      </div>
       </>
       )
 
